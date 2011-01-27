@@ -26,10 +26,10 @@ ClassLogger supports a bunch of options that are passed straight to the Logger. 
   <dd>Set this to how many logfiles you want to keep after rotating (or set +rotate+ above)</dd>
 
   <dt><strong>:path</strong></dt>
-  <dd>The path to your log folder. (Default: "%<rails_root>s/log") -- see Interpolations section</dd>
+  <dd>The path to your log folder. (Default: "%&lt;rails_root>s/log") -- see Interpolations section</dd>
 
   <dt><strong>:in</strong></dt>
-  <dd>This is the name of your logfile. (Use: "%<class_name>s" to interpolate the class's name) (Default: "%<class_name>s.log") -- see Interpolations section</dd>
+  <dd>This is the name of your logfile. (Use: "%&lt;class_name>s" to interpolate the class's name) (Default: "%&lt;class_name>s.log") -- see Interpolations section</dd>
 
   <dt><strong>:as</strong></dt>
   <dd>This is the method your logger will be available to the class as. (Default: logger)</dd>
@@ -65,7 +65,7 @@ Example Usage
 
 <pre>
   # simple use case to override active records logger
-  class Transaction < ActiveRecord::Base
+  class Transaction &lt; ActiveRecord::Base
     include ClassLogger
     has_logger
   
@@ -77,18 +77,18 @@ Example Usage
 
   # custom logs for special models within rails
   # specifying a custom logfile and logger name
-  class Transaction < ActiveRecord::Base
+  class Transaction &lt; ActiveRecord::Base
     include ClassLogger
     has_logger :in => 'gateway.log', :as => :gateway_logger
   
     def process!
       gateway_logger.info "Creating transation: #{amount}"  # => goes to log/gateway.log
-      logger.info "Hello default logger!"                   # => goes to log/<environment>.log
+      logger.info "Hello default logger!"                   # => goes to log/&lt;environment>.log
     end
   end
   
   # overriding active record's default logger with a custom logfile
-  class Transaction < ActiveRecord::Base
+  class Transaction &lt; ActiveRecord::Base
     include ClassLogger
     has_logger :in => 'gateway.log'
   
@@ -118,7 +118,7 @@ Example Usage
   # inside a class with a custom formatter
   class Something
     include ClassLogger
-    has_logger :path => "%<current>s/log", :rotate => :daily, 
+    has_logger :path => "%&lt;current>s/log", :rotate => :daily, 
       :formatter => proc{ |severity, time, program_name, message| "[%s](Something): %s\n" % [severity, message] }
 
     def initialize
