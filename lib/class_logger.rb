@@ -1,3 +1,5 @@
+require 'logger'
+
 module ClassLogger
   def self.included(base)
     base.extend DSL
