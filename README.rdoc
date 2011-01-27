@@ -2,31 +2,35 @@
 
 Makes adding multiple loggers or custom loggers to any ruby class. Written mainly to have certain models in Rails log to a different file while maintaining the original logger (or overwriting it).
 
+== Credits
+
+The idea came from *eandrejko* and his class_logger. I just added some more flexibility and made it to work outside of Rails.
+
 == Installation
 
 gem install class_logger
 
 == Options
 
-  ClassLogger supports a bunch of options that are passed straight to the Logger. Most of these options should make sense, but they are described in further detail in Logger's rdoc files.
+ClassLogger supports a bunch of options that are passed straight to the Logger. Most of these options should make sense, but they are described in further detail in Logger's rdoc files.
 
-  rotate:: Set this to daily, weekly, etc. - anything Logger supports
-  max_size:: Set this to the size you want the log to rotate at (or set +rotate+ above)
-  keep:: Set this to how many logfiles you want to keep after rotating (or set +rotate+ above)
-  path:: The path to your log folder. (Default: "%<rails_root>s/log")
-  in:: This is the name of your logfile. (Use: "%<class_name>s" to interpolate the class's name) (Default: "%<class_name>s.log")
-  as:: This is the method your logger will be available to the class as. (Default: logger)
-  formatter:: This can be any custom proc or method you want to assign. (See Logger's rdoc files for more details on this)
-  level:: This is the log level
+rotate:: Set this to daily, weekly, etc. - anything Logger supports
+max_size:: Set this to the size you want the log to rotate at (or set +rotate+ above)
+keep:: Set this to how many logfiles you want to keep after rotating (or set +rotate+ above)
+path:: The path to your log folder. (Default: "%<rails_root>s/log")
+in:: This is the name of your logfile. (Use: "%<class_name>s" to interpolate the class's name) (Default: "%<class_name>s.log")
+as:: This is the method your logger will be available to the class as. (Default: logger)
+formatter:: This can be any custom proc or method you want to assign. (See Logger's rdoc files for more details on this)
+level:: This is the log level
 
 == Interpolations
 
-  The following can be used in the +path+ or +in+ options.
-  
-  %<rails_root>s:: Will replace itself with Rails.root when in a rails app
-  %<current>s:: Will replace itself with the +dirname+ of the file
-  %<parent>s:: Will replace itself with the parent directory of the file
-  %<class_name>s:: Will replace itself with the name of the class.
+The following can be used in the +path+ or +in+ options.
+
+%<rails_root>s:: Will replace itself with Rails.root when in a rails app
+%<current>s:: Will replace itself with the +dirname+ of the file
+%<parent>s:: Will replace itself with the parent directory of the file
+%<class_name>s:: Will replace itself with the name of the class.
   
 == Usage
 
@@ -93,6 +97,3 @@ gem install class_logger
   end
   Something.new
   Something.loggers[:logger].debug "System logger"
-  
-  
-
