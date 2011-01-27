@@ -28,8 +28,14 @@ module ClassLogger
     end
     
     def setup_logger(options)
-      file_path = File.join(options[:path], options[:in]).to_s % \
-        {:rails_root => (defined?(Rails) ? Rails.root : ''), :class_name => self.to_s.downcase}
+      interpolations = {
+        :rails_root => (defined?(Rails) ? Rails.root : ''),
+        :class_name => self.to_s.downcase,
+        :current => File.dirname($FILENAME),
+        :parent => File.expand_path('../../', $FILENAME)
+      }
+      
+      file_path = File.join(options[:path], options[:in]).to_s % interpolations
       if (rotate = options[:rotate])
         _logger = ::Logger.new(file_path, rotate)
       else
