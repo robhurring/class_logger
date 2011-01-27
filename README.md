@@ -50,12 +50,6 @@ The following can be used in the *path* or *in* options.
   <dt><strong>%&lt;rails_root>s</strong></dt>
   <dd>Will replace itself with Rails.root when in a rails app</dd>
 
-  <dt><strong>%&lt;current>s</strong></dt>
-  <dd>Will replace itself with the +dirname+ of the file</dd>
-
-  <dt><strong>%&lt;parent>s</strong></dt>
-  <dd>Will replace itself with the parent directory of the file</dd>
-
   <dt><strong>%&lt;class_name>s</strong></dt>
   <dd>Will replace itself with the name of the class.</dd>
 </dl>
@@ -118,7 +112,7 @@ Example Usage
   # inside a class with a custom formatter
   class Something
     include ClassLogger
-    has_logger :path => "%&lt;current>s/log", :rotate => :daily, 
+    has_logger :path => File.expand_path("../log", __FILE__), :rotate => :daily, 
       :formatter => proc{ |severity, time, program_name, message| "[%s](Something): %s\n" % [severity, message] }
 
     def initialize

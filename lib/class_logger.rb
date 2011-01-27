@@ -30,9 +30,7 @@ module ClassLogger
     def setup_logger(options)
       interpolations = {
         :rails_root => (defined?(Rails) ? Rails.root : ''),
-        :class_name => self.to_s.downcase,
-        :current => File.dirname($FILENAME),
-        :parent => File.expand_path('../../', $FILENAME)
+        :class_name => self.to_s.downcase
       }
       
       file_path = File.join(options[:path], options[:in]).to_s % interpolations
