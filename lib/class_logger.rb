@@ -45,6 +45,7 @@ module ClassLogger
       as = options[:as]
       self.loggers[as] = _logger
       define_method(as){ self.class.loggers[as] }
+      define_singleton_method(as){ loggers[as] }
     end
   end
 end
