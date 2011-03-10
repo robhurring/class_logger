@@ -4,7 +4,7 @@ $log_path = File.dirname(__FILE__)
 # test module functionality
 module Hello
   include ClassLogger
-  has_logger :in => "%{caller_path}/%{class_name}.log", :as => :my_logger
+  has_logger :in => "#{$log_path}/%{class_name}.log", :as => :my_logger
   
   def self.alternate
     loggers[:my_logger]
@@ -17,7 +17,7 @@ Hello.alternate.info "Hai der!"
 class Gateway
   include ClassLogger
   has_logger :path => $log_path, :level => Logger::ERROR
-  has_logger :in => "%{caller_path}/transaction.log", :as => :transaction_logger,
+  has_logger :in => "#{$log_path}/transaction.log", :as => :transaction_logger,
     :formatter => proc{ |severity, time, program_name, message| "[%s-Transaction]: %s\n" % [severity, message] }
   
   def initialize
@@ -36,7 +36,7 @@ g.transact!
 # test default functionality
 class Default
   include ClassLogger
-  has_logger :path => "%{caller_path}"
+  has_logger :path => $log_path
 end
 
 Default.new.logger.info "Testing"

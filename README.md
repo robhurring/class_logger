@@ -55,9 +55,6 @@ The following can be used in the *path* or *in* options.
 
   <dt><strong>%{class_name}</strong></dt>
   <dd>Will replace itself with the name of the class.</dd>
-
-  <dt><strong>%{caller_path_}</strong></dt>
-  <dd>Will replace itself the path of the calling file. (Useful if you want logs relative to your scripts location)</dd>
 </dl>
   
 Example Usage
@@ -100,7 +97,7 @@ Example Usage
   # create a logger for a module
   module Something
     include ClassLogger
-    has_logger :in => "%{caller_path}/log/my_module.log"
+    has_logger :in => "#{File.dirname(__FILE__)}/log/my_module.log"
     has_logger :in => "/var/log/utoh.log", :as => :utoh_logger
   end
   Something.logger.info "Testing 123" # => goes to ./log/my_module.log
