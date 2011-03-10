@@ -1,6 +1,8 @@
 require 'logger'
 
 module ClassLogger
+  VERSION = '1.0'
+  
   def self.included(base)
     base.extend DSL
   end
