@@ -65,8 +65,10 @@ class ClassLoggerTest < Test::Unit::TestCase
   end
   
   def test_named_logger
-    assert @tc.named.info("Named")
-    assert TestClass.named.info("Named")
+    assert @tc.named.info("NamedINSTANCE")
+    assert TestClass.named.info("NamedCLASS")
+    assert log_includes(File.join($logpath,'class_named.log'), /NamedINSTANCE/)
+    assert log_includes(File.join($logpath,'class_named.log'), /NamedCLASS/)
   end
   
   def test_level
