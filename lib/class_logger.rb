@@ -1,7 +1,7 @@
 require 'logger'
 
 module ClassLogger
-  VERSION = '1.0'
+  VERSION = '1.1'
   
   def self.included(base)
     base.extend DSL
@@ -27,7 +27,7 @@ module ClassLogger
   
   module ClassMethods
     def loggers
-      @@loggers ||= {}
+      @loggers ||= {}
     end
     
     def setup_logger(options)
@@ -42,6 +42,7 @@ module ClassLogger
       end  
 
       file_path = File.join(options[:path], options[:file]).to_s % interpolations
+      
       if (rotate = options[:rotate])
         _logger = ::Logger.new(file_path, rotate)
       else
