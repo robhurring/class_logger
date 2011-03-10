@@ -26,10 +26,13 @@ ClassLogger supports a bunch of options that are passed straight to the Logger. 
   <dd>Set this to how many logfiles you want to keep after rotating (or set +rotate+ above)</dd>
 
   <dt><strong>:path</strong></dt>
-  <dd>The path to your log folder. (Default: "%&lt;rails_root>s/log") -- see Interpolations section</dd>
+  <dd>The path to your log folder. (Default: "%{rails_root}/log") -- see Interpolations section</dd>
+
+  <dt><strong>:file</strong></dt>
+  <dd>This is the name of your logfile. (Use: "%{class_name}" to interpolate the class's name) (Default: "%{class_name}.log") -- see Interpolations section</dd>
 
   <dt><strong>:in</strong></dt>
-  <dd>This is the name of your logfile. (Use: "%&lt;class_name>s" to interpolate the class's name) (Default: "%&lt;class_name>s.log") -- see Interpolations section</dd>
+  <dd><strong>Overrides :file &amp; :path!</strong> If you include this setting, it will break the filename from the path and use those options.</dd>
 
   <dt><strong>:as</strong></dt>
   <dd>This is the method your logger will be available to the class as. (Default: logger)</dd>
@@ -47,11 +50,14 @@ Interpolations
 The following can be used in the *path* or *in* options.
 
 <dl>
-  <dt><strong>%&lt;rails_root>s</strong></dt>
+  <dt><strong>%{rails_root}</strong></dt>
   <dd>Will replace itself with Rails.root when in a rails app</dd>
 
-  <dt><strong>%&lt;class_name>s</strong></dt>
+  <dt><strong>%{class_name}</strong></dt>
   <dd>Will replace itself with the name of the class.</dd>
+
+  <dt><strong>%{caller_path_}</strong></dt>
+  <dd>Will replace itself the path of the calling file. (Useful if you want logs relative to your scripts location)</dd>
 </dl>
   
 Example Usage
@@ -64,7 +70,7 @@ Example Usage
     has_logger
   
     def process!
-      logger.info "Creating transation: #{amount}"  # => goes to log/transaction.log
+      logger.info "Creating transation: #{amount}"  # => goes to RAILS_ROOT/log/transaction.log
     end
   end
   
@@ -73,41 +79,32 @@ Example Usage
   # specifying a custom logfile and logger name
   class Transaction &lt; ActiveRecord::Base
     include ClassLogger
-    has_logger :in => 'gateway.log', :as => :gateway_logger
+    has_logger :file => 'gateway.log', :as => :gateway_logger
   
     def process!
-      gateway_logger.info "Creating transation: #{amount}"  # => goes to log/gateway.log
-      logger.info "Hello default logger!"                   # => goes to log/&lt;environment>.log
+      gateway_logger.info "Creating transation: #{amount}"  # => goes to RAILS_ROOT/log/gateway.log
+      logger.info "Hello default logger!"                   # => goes to default rails logger
     end
   end
   
   # overriding active record's default logger with a custom logfile
   class Transaction &lt; ActiveRecord::Base
     include ClassLogger
-    has_logger :in => 'gateway.log'
+    has_logger :file => 'gateway.log'
   
     def process!
-      logger.info "Creating transation: #{amount}"  # => goes to log/gateway.log
+      logger.info "Creating transation: #{amount}"  # => goes to RAILS_ROOT/log/gateway.log
     end
   end
 
   # create a logger for a module
   module Something
     include ClassLogger
-    has_logger :path => File.expand_path("../log", __FILE__), :in => 'my_module.log'
-    has_logger :path => '/var/log', :in => 'utoh.log', :as => :utoh_logger
-    
-    # has_logger only makes instance methods, so we need to wrap it up
-    def self.logger
-      self.loggers[:logger]
-    end
-    
-    def self.utoh
-      self.loggers[:utoh_logger]
-    end
+    has_logger :in => "%{caller_path}/log/my_module.log"
+    has_logger :in => "/var/log/utoh.log", :as => :utoh_logger
   end
-  Something.logger.info "Testing 123"
-  Something.utoh.error "oops!"
+  Something.logger.info "Testing 123" # => goes to ./log/my_module.log
+  Something.utoh_logger.error "oops!" # => goes to /var/log/utoh.log
   
   # inside a class with a custom formatter
   class Something
@@ -116,9 +113,9 @@ Example Usage
       :formatter => proc{ |severity, time, program_name, message| "[%s](Something): %s\n" % [severity, message] }
 
     def initialize
-      logger.debug "Created Something."
+      logger.debug "Created Something." # => goes to ../log/something.log
     end
   end
   Something.new
-  Something.loggers[:logger].debug "System logger"
+  Something.loggers[:logger].debug "System logger" # alter entry point to logger
 </pre>
