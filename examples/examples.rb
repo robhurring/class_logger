@@ -4,7 +4,7 @@ $log_path = File.dirname(__FILE__)
 # test module functionality
 module Hello
   include ClassLogger
-  has_logger :in => "%{class_name}.log", :as => :my_logger
+  has_logger :in => "%{caller_path}/%{class_name}.log", :as => :my_logger
   
   def self.alternate
     loggers[:my_logger]
