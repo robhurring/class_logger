@@ -1,6 +1,8 @@
 Class Logger
 ============
 
+[![Build Status](https://travis-ci.org/robhurring/class_logger.png?branch=master)](https://travis-ci.org/robhurring/class_logger)
+
 Makes adding multiple loggers or custom loggers to any ruby class. Written mainly to have certain models in Rails log to a different file while maintaining the original logger (or overwriting it).
 
 The idea came from [eandrejko](https://github.com/eandrejko) and his class_logger. I just added some more flexibility and made it to work outside of Rails.
@@ -56,7 +58,7 @@ The following can be used in the *path* or *in* options.
   <dt><strong>%{class_name}</strong></dt>
   <dd>Will replace itself with the name of the class.</dd>
 </dl>
-  
+
 Example Usage
 -------------
 
@@ -65,30 +67,30 @@ Example Usage
   class Transaction &lt; ActiveRecord::Base
     include ClassLogger
     has_logger
-  
+
     def process!
       logger.info "Creating transation: #{amount}"  # => goes to RAILS_ROOT/log/transaction.log
     end
   end
-  
+
 
   # custom logs for special models within rails
   # specifying a custom logfile and logger name
   class Transaction &lt; ActiveRecord::Base
     include ClassLogger
     has_logger :file => 'gateway.log', :as => :gateway_logger
-  
+
     def process!
       gateway_logger.info "Creating transation: #{amount}"  # => goes to RAILS_ROOT/log/gateway.log
       logger.info "Hello default logger!"                   # => goes to default rails logger
     end
   end
-  
+
   # overriding active record's default logger with a custom logfile
   class Transaction &lt; ActiveRecord::Base
     include ClassLogger
     has_logger :file => 'gateway.log'
-  
+
     def process!
       logger.info "Creating transation: #{amount}"  # => goes to RAILS_ROOT/log/gateway.log
     end
@@ -102,11 +104,11 @@ Example Usage
   end
   Something.logger.info "Testing 123" # => goes to ./log/my_module.log
   Something.utoh_logger.error "oops!" # => goes to /var/log/utoh.log
-  
+
   # inside a class with a custom formatter
   class Something
     include ClassLogger
-    has_logger :path => File.expand_path("../log", __FILE__), :rotate => :daily, 
+    has_logger :path => File.expand_path("../log", __FILE__), :rotate => :daily,
       :formatter => proc{ |severity, time, program_name, message| "[%s](Something): %s\n" % [severity, message] }
 
     def initialize
