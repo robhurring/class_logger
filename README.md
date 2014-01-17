@@ -62,7 +62,7 @@ The following can be used in the *path* or *in* options.
 Example Usage
 -------------
 
-<pre>
+```ruby
   # simple use case to override active records logger
   class Transaction &lt; ActiveRecord::Base
     include ClassLogger
@@ -117,4 +117,4 @@ Example Usage
   end
   Something.new
   Something.loggers[:logger].debug "System logger" # alter entry point to logger
-</pre>
+```
