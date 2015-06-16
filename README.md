@@ -64,7 +64,7 @@ Example Usage
 
 ```ruby
   # simple use case to override active records logger
-  class Transaction &lt; ActiveRecord::Base
+  class Transaction < ActiveRecord::Base
     include ClassLogger
     has_logger
 
@@ -76,7 +76,7 @@ Example Usage
 
   # custom logs for special models within rails
   # specifying a custom logfile and logger name
-  class Transaction &lt; ActiveRecord::Base
+  class Transaction < ActiveRecord::Base
     include ClassLogger
     has_logger :file => 'gateway.log', :as => :gateway_logger
 
@@ -87,7 +87,7 @@ Example Usage
   end
 
   # overriding active record's default logger with a custom logfile
-  class Transaction &lt; ActiveRecord::Base
+  class Transaction < ActiveRecord::Base
     include ClassLogger
     has_logger :file => 'gateway.log'
 
